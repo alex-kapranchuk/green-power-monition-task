@@ -1,17 +1,13 @@
-import io.qameta.allure.Description;
-import io.qameta.allure.Epic;
-import io.qameta.allure.Feature;
-import io.qameta.allure.Severity;
-import io.qameta.allure.SeverityLevel;
-import io.qameta.allure.Story;
+import io.qameta.allure.*;
 import launch.TestResultListener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-import pageobjects.CartPage;
-import pageobjects.ProductsPage;
-import pageobjects.ShopHomePage;
+import steps.CartPageSteps;
+import steps.ProductsPageSteps;
+import steps.SearchPageSteps;
+import steps.ShopHomePageSteps;
 import utils.ScreenshotHelper;
 
 @Epic("Default Suite")
@@ -28,17 +24,18 @@ public class SearchProductTest extends Base {
     public void searchProductTest() {
 
         String PRODUCT_NAME = "Laptop";
-        int QUANTITY_IN_CART =1;
+        int QUANTITY_IN_CART = 1;
 
         logger.info("Test stats the Search and Product Cart a Laptop");
 
-        new ShopHomePage(page)
+        new ShopHomePageSteps(page)
                 .open()
-                .search(PRODUCT_NAME)
+                .search(PRODUCT_NAME);
+        new SearchPageSteps(page)
                 .selectProduct(PRODUCT_NAME);
-        new ProductsPage(page)
+        new ProductsPageSteps(page)
                 .addByIndexProductToCart(0);
-        new CartPage(page)
+        new CartPageSteps(page)
                 .goToCart(QUANTITY_IN_CART)
                 .verifyCartItemCount(PRODUCT_NAME, QUANTITY_IN_CART);
 

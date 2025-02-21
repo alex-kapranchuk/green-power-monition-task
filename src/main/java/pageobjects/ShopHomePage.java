@@ -1,8 +1,8 @@
 package pageobjects;
 
+import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
-import io.qameta.allure.Step;
 
 public class ShopHomePage {
 
@@ -12,30 +12,20 @@ public class ShopHomePage {
         this.page = page;
     }
 
-    @Step("Open Demo Web Shop homepage")
-    public ShopHomePage open() {
+    public void open() {
         page.navigate("https://demowebshop.tricentis.com/");
-        return this;
     }
 
-    @Step("Search for product: {product}")
-    public SearchPage search(String product) {
-        String searchInputSelector = "#small-searchterms";
-        page.locator(searchInputSelector).fill(product);
-        page.locator(searchInputSelector).press("Enter");
-        return new SearchPage(page);
+    public Locator searchInput() {
+        return page.locator("#small-searchterms");
     }
 
-    @Step("Navigate to category: {category}")
-    public ShopHomePage navigateToCategory(String category) {
-        page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName(category)).nth(1).click();
-        return this;
+    public Locator categoryLink(String category) {
+        return page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName(category)).nth(1);
     }
 
-    @Step("Navigate to sub-category: {subCategory}")
-    public ProductsPage navigateToSubCategory(String subCategory) {
-        page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName(subCategory)).click();
-        return new ProductsPage(page);
+    public Locator subCategoryLink(String subCategory) {
+        return page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName(subCategory));
     }
 }
 

@@ -1,17 +1,13 @@
-import io.qameta.allure.Description;
-import io.qameta.allure.Epic;
-import io.qameta.allure.Feature;
-import io.qameta.allure.Severity;
-import io.qameta.allure.SeverityLevel;
-import io.qameta.allure.Story;
+import io.qameta.allure.*;
 import launch.TestResultListener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-import pageobjects.CartPage;
-import pageobjects.ShopHomePage;
+import steps.CartPageSteps;
+import steps.ProductsPageSteps;
+import steps.ShopHomePageSteps;
 import utils.ScreenshotHelper;
 
 import java.util.Map;
@@ -38,10 +34,11 @@ public class CartManagementTest extends Base {
 
         logger.info("Test stats the Shopping Cart Management");
 
-        new ShopHomePage(page)
+        new ShopHomePageSteps(page)
                 .open()
                 .navigateToCategory(CATEGORY)
-                .navigateToSubCategory(SUB_CATEGORY)
+                .navigateToSubCategory(SUB_CATEGORY);
+        new ProductsPageSteps(page)
                 .addByIndexProductToCart(0)
                 .addProductToCartById(PRODUCT_ID)
                 .clickNavigationBar()
@@ -52,7 +49,7 @@ public class CartManagementTest extends Base {
         ScreenshotHelper.attachScreenshot(page, "Shopping Cart Management starts");
         logger.info("Starts the Shopping Cart Management");
 
-        CartPage cartPage = new CartPage(page)
+        CartPageSteps cartPage = new CartPageSteps(page)
                 .goToCart(2);
 
         Map<String, String> prices = cartPage.takePrices();
