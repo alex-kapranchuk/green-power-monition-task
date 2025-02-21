@@ -1,5 +1,7 @@
 import com.microsoft.playwright.*;
 
+import launch.BrowserFactory;
+import launch.BrowserTypeEnum;
 import org.testng.annotations.*;
 
 import java.nio.file.Paths;
@@ -13,17 +15,20 @@ public class Base {
     BrowserContext context;
     Page page;
 
+    // Add BrowserFactory.getBrowser() in @BeforeSuite
     @BeforeSuite
-    public static void launchBrowser() {
-        playwright = Playwright.create();
-        browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(false));
+    public void setup() {
+        browser = BrowserFactory.getBrowser(
+                BrowserTypeEnum.CHROMIUM,
+                true,
+                1280,
+                720
+        );
     }
 
     @AfterSuite
-    public static void closeBrowser() {
-        if (playwright != null) {
-            playwright.close();
-        }
+    public void teardown() {
+        BrowserFactory.closeBrowser();
     }
 
     @BeforeMethod
