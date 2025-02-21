@@ -1,23 +1,25 @@
-import io.qameta.allure.Allure;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Story;
+import launch.TestResultListener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import pageobjects.CartPage;
 import pageobjects.ShopHomePage;
+import utils.ScreenshotHelper;
 
-import java.io.ByteArrayInputStream;
 import java.util.Map;
 
 
 @Epic("Default Suite")
 @Feature("Cart Management")
+@Listeners(TestResultListener.class)
 public class CartManagementTest extends Base {
 
     private static final Logger logger = LogManager.getLogger(CartManagementTest.class);
@@ -26,7 +28,7 @@ public class CartManagementTest extends Base {
     @Story("Add Product to Cart")
     @Severity(SeverityLevel.CRITICAL)
     @Description("Test description: Verify the product was added to the cart")
-    public void searchProductTest() {
+    public void cartManagementTest() {
 
         String CATEGORY = "Computers";
         String SUB_CATEGORY = "Picture for category Desktops";
@@ -47,7 +49,7 @@ public class CartManagementTest extends Base {
                 .addProductToCartById(PRODUCT_ID2);
         page.mouse().up();
 
-        Allure.addAttachment("1", new ByteArrayInputStream(page.screenshot()));
+        ScreenshotHelper.attachScreenshot(page, "Shopping Cart Management starts");
         logger.info("Starts the Shopping Cart Management");
 
         CartPage cartPage = new CartPage(page)
@@ -64,7 +66,7 @@ public class CartManagementTest extends Base {
 
         Assert.assertEquals(Double.parseDouble(cartPage.takePrices().get("totalBlanc")), expectedTotal, 0.01);
 
-        Allure.addAttachment("2", new ByteArrayInputStream(page.screenshot()));
+        ScreenshotHelper.attachScreenshot(page, "Shopping Cart Management finishes");
         logger.info("Test is finished");
     }
 }
